@@ -30,6 +30,7 @@ function addTodoUI(todos){
         const check = document.createElement("input");
         check.type = "checkbox";
         check.className = "m-2"
+        check.id = "check";
         
         const div3 = document.createElement("div");
         div3.className = "icons";
@@ -79,5 +80,33 @@ function formEvent(e){
              }
          });
         e.target.parentElement.parentElement.remove();
+    }
+    if(e.target.id == "check"){
+        e.target.parentElement.children[1].classList.toggle("text-primary");
+    }
+    if(e.target.className == "fa-solid fa-pencil p-2"){
+        const reInput = document.createElement("input");
+        const newText = document.createElement("p");
+        text = e.target.parentElement.parentElement.children[0].children[1];
+        let oldText = text.innerText;
+        text.remove();
+        const div = e.target.parentElement.parentElement.children[0];
+        div.appendChild(reInput);
+        reInput.addEventListener("keyup", replace);
+        function replace(e){
+            if(e.keyCode == 13){
+                newText.innerText = reInput.value;
+                div.appendChild(newText);
+                let txt = reInput.value;
+                checkLocal();
+                todo.forEach((todos,index)=>{
+                    if(todos == oldText){
+                        todo.splice(index,1,txt);
+                        localStorage.setItem("todos",JSON.stringify(todo));
+                        reInput.remove();
+                    }
+                });
+            }
+        }
     }
 }
